@@ -1,38 +1,76 @@
-package sg.edu.np.WhackAMole;
+package com.example.whack_a_mole;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
-
-
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* Hint
-        - The function setNewMole() uses the Random class to generate a random value ranged from 0 to 2.
-        - Feel free to modify the function to suit your program.
-    */
+    private Button ButtonLeft;
+    private Button ButtonMiddle;
+    private Button ButtonRight;
+    private TextView Score;
+    private static int count = 0;
+    private static int molecount = 3;
+    private static final String TAG = "ButtonActivity";
+    private static int i = 0;
+
+    public void Randomizer(){
+        Button[] buttons = {ButtonLeft, ButtonMiddle, ButtonRight};
+        Random random = new Random();
+        int select = random.nextInt(3);
+        Button m = buttons[select];
+        for (Button b : buttons){
+            if (b == m){
+                b.setText("*");
+            }
+            else{
+                b.setText("O");
+            }
+        }
+    }
+    public void UpdateScore(){
+        Score.setText(Integer.toString(count++));
+    }
+    public boolean Check(Button b){
+        if ( b.getText() == "*"){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.v(TAG, "Finished Pre-Initialisation!");
+        ButtonLeft = (Button) findViewById(R.id.ButtonLeft);
+        ButtonMiddle = (Button) findViewById(R.id.ButtonMiddle);
+        ButtonRight = (Button) findViewById(R.id.ButtonRight);
+        Score = (TextView) findViewById(R.id.Score);
+        Randomizer();
     }
-
     @Override
-    protected void onStart(){
+    public void onStart(){
         super.onStart();
-        setNewMole();
-        Log.v(TAG, "Starting GUI!");
+        Log.d(TAG, "Application launched!");
+        Randomizer();
+        UpdateScore();
+    }
+    public void OnClickButton(View v){
+        Button button = (Button) v;
+        if (Check(button) == true){
+            UpdateScore();
+        }
+        Randomizer();
     }
 
 
-    public void setNewMole()
-    {
-        Random ran = new Random();
-        int randomLocation = ran.nextInt(3);
-    }
 }
+
